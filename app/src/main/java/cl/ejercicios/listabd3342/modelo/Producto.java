@@ -18,6 +18,14 @@ public class Producto {
 
     //Constructor
 
+
+    public Producto(String nombre, int cantidad, String unidad, boolean estado) {
+        this.nombre = nombre;
+        this.cantidad = cantidad;
+        this.unidad = unidad;
+        this.estado = estado;
+    }
+
     public Producto(String nombre, int cantidad, String unidad) {
         this.nombre = nombre;
         this.cantidad = cantidad;
