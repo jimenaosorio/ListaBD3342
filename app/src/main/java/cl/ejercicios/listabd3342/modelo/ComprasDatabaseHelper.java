@@ -3,6 +3,7 @@ package cl.ejercicios.listabd3342.modelo;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -80,5 +81,34 @@ public class ComprasDatabaseHelper extends SQLiteOpenHelper {
 
         return productos;
     }
+    public Producto getProducto(String nombre)
+    {
+        Producto p;
+        SQLiteDatabase db=getReadableDatabase();
+        String sqlTxt="SELECT NOMBRE, CANTIDAD, UNIDAD, ESTADO "
+                +"FROM PRODUCTOS WHERE NOMBRE=? ";
+        String[] argumentos=new String[]{nombre};
+
+        try{
+            Cursor cursor=db.rawQuery(sqlTxt,argumentos);
+            cursor.moveToFirst();
+
+            boolean estado=false;
+            if(cursor.getInt(3)==1) estado=true;
+            p=new Producto(cursor.getString(0), cursor.getInt(1),
+                    cursor.getString(2),estado);
+        }catch (SQLException ex)
+        {
+            p=null;
+        }
+
+        return p;
+    }
+
+
+
+
+
+
 
 }
