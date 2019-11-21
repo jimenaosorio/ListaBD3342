@@ -104,6 +104,39 @@ public class ComprasDatabaseHelper extends SQLiteOpenHelper {
 
         return p;
     }
+    //update
+    public String cambiarEstado(Producto p)
+    {
+        //NOTA: El producto ya viene con su nuevo estado, debemos cambiarlo en la BD
+        int estadoInt;
+        if(p.isEstado()) estadoInt=1;
+        else estadoInt=0;
+
+        String sqlTxt="UPDATE PRODUCTOS SET ESTADO=? WHERE NOMBRE=?";
+        Object[] argumentos=new Object[]{estadoInt,p.getNombre()};
+
+        try{
+            getWritableDatabase().execSQL(sqlTxt,argumentos);
+            return "Se cambió correctamente el estado";
+        }catch (SQLException ex)
+        {
+            return "No se puede cambiar el estado";
+        }
+
+    }
+    //Delete
+    public String eliminarComprados()
+    {
+        String sqlTxt="DELETE FROM PRODUCTOS WHERE ESTADO=0";
+        try{
+            getWritableDatabase().execSQL(sqlTxt);
+            return "Se eliminaron todos los productos comprados";
+        }
+        catch (SQLException ex)
+        {
+            return "No se pueden eliminar los productos";
+        }
+    }
 
 
 
