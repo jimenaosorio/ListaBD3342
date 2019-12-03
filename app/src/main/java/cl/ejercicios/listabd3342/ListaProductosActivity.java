@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import cl.ejercicios.listabd3342.modelo.ComprasDatabaseHelper;
 import cl.ejercicios.listabd3342.modelo.ListDeCompras;
 import cl.ejercicios.listabd3342.modelo.Producto;
 
@@ -27,7 +28,16 @@ public class ListaProductosActivity extends ListActivity {
     public void cargarLista()
     {
         lista=getListView();
-        List<Producto> productoList= ListDeCompras.getInstancia().getListaDeCompras();
+
+        ComprasDatabaseHelper helper=new ComprasDatabaseHelper(this);
+
+        //Recupero la lista de productos desde la base de datos
+        List<Producto> productoList=helper.listaProductos();
+
+        //List<Producto> productoList= ListDeCompras.getInstancia().getListaDeCompras();
+
+
+
         ArrayAdapter<Producto> listaAdapter= new ArrayAdapter<Producto>(this,
                 android.R.layout.simple_expandable_list_item_1,productoList);
         lista.setAdapter(listaAdapter);
@@ -36,8 +46,21 @@ public class ListaProductosActivity extends ListActivity {
     @Override
     public void onListItemClick(ListView listView, View view, int posicion, long id)
     {
+        //Obtengo el elemento de la lista que se seleccionó
+        Object o=lista.getItemAtPosition(posicion);
+
+        //Leo el texto de la línea seleccionada
+        String linea=o.toString();
+
+        //Separar en un arreglo para obtener el nombre
+        String[] separar=linea.split(":");
+
         Intent intent=new Intent(ListaProductosActivity.this,DetallesActivity.class);
-        intent.putExtra("idProducto",(int)id);
+
+        //Enviamos el nombre a DetallesActivity
+        intent.putExtra("nombreProducto",separar[0]);
+
+        // intent.putExtra("idProducto",(int)id);
         startActivityForResult(intent,1);
     }
     @Override
